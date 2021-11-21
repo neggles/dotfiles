@@ -116,6 +116,21 @@ if ! shopt -oq posix; then
   fi
 fi
 
+# User configuration
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+export LANG=en_AU.UTF-8
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+elif (which code > /dev/null); then
+  export EDITOR='code --wait'
+else
+  export EDITOR='nano'
+fi
+
 # include local overrides if required
 [[ -f ~/.bashrc.local ]] && source ~/.bashrc.local
 
