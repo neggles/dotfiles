@@ -11,3 +11,9 @@ chezmoi.code-workspace
 .bashrc_linux
 .bashrc_osh
 {{ end }}
+
+{{ if (eq .chezmoi.os "linux") }}
+{{   if not (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+.oh-my-bash/
+{{   end }}
+{{ end }}
