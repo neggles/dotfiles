@@ -2,3 +2,12 @@
 install.sh
 LICENSE
 README.md
+chezmoi.code-workspace
+
+{{ if ne .chezmoi.os "darwin" }}
+.bashrc_darwin
+{{ end }}
+{{ if ne .chezmoi.os "linux" }}
+.bashrc_linux
+.bashrc_osh
+{{ end }}

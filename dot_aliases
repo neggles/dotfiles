@@ -1,0 +1,63 @@
+# global / non-shell-specific aliases go here :D
+
+### * 1Password, if installed ###
+if (which op > /dev/null); then
+    alias oplogin='$ eval $(op signin stanholm.1password.com neg2led@gmail.com)'
+fi
+
+### * some useful stuff ###
+alias benice='ionice -c 3 nice -n19'
+alias mtmake="make -j$(($(nproc)+1))"
+
+alias dfh='df -HT --total -x tmpfs -x squashfs'
+alias lsblks='lsblk -e7'
+
+# make serial console happen
+picoterm() {
+    PORT=${1:?"/dev/ttyUSB0"}
+    BAUD=${2:?"115200"}
+    sudo picocom -f n -b "$BAUD" "$PORT"
+}
+
+### * openWRT ###
+# build shit as fast as you can
+alias wrtmake='make -j$(($(nproc)+1)) world'
+alias wrtmakeauto='make -j$(($(nproc)+1)) world || make -j1 V=s world'
+
+# quilt-related; first, prep for quilt shenanigans:
+alias wrtkqprep='make target/linux/{clean,prepare} V=s QUILT=1'
+# cd into quilt dir
+alias wrtkqpush='pushd build_dir/target-*/linux-*/linux-5*'
+# cd back out of quilt dir
+alias wrtkqpop='popd ../../../..'
+# do just the kernel build and 'install' to test compile
+alias wrtkmake='make -j$(($(nproc)+1)) target/linux/{compile,install} V=s'
+# fetch the updated patches from quilt back into the main repo
+# after runnning this one you have to do prep again for more edits i think
+alias wrtkqfetch='make target/linux/update package/index V=s'
+
+### * some useful functions for devicetree ###
+if (which dtc > /dev/null); then
+    resize_dtb() {
+        local DTB_FILE="$1"
+        local DTB_LEN=$(file -b "${DTB_FILE}" | sed -e 's/^.\+, size=\([0-9]\+\).*/\1/')
+        local DTB_OUT=$(echo "${DTB_FILE}" | sed 's/\.dtb/-trim.dtb/')
+        dd if="${DTB_FILE}" of="${DTB_OUT}" bs=1 count="${DTB_LEN}"
+    }
+
+    dtb_to_dts() {
+        local DTB_FILE="$1"
+        local DTB_OUT=$(echo "${DTB_FILE}" | sed 's/\.dtb/.dts/')
+        dtc -q -@ -A -H epapr -I dtb -O dts -o "${DTB_OUT}" "${DTB_FILE}"
+    }
+
+    rename_dts() {
+        local DTS_FILE="$1"
+        local DTS_MODEL=$(grep model "${DTS_FILE}" | sed -e 's/\s\+model = \".\+, \(.*\)\".*/\L\1/g')
+        mv "${DTS_FILE}" "${DTS_MODEL}_${DTS_FILE}"
+    }
+
+    alias all_dtb_trim='for file in $(ls -1 *.dtb); do resize_dtb $file; done'
+    alias all_dtb_to_dts='for file in $(ls -1 *.dtb); do dtb_to_dts $file; done'
+    alias all_dts_rename='for file in $(ls -1 *.dts); do rename_dts $file; done'
+fi

@@ -1,0 +1,13 @@
+{
+    "folders": [
+        {
+            "path": "../../.local/share/chezmoi",
+            "name": "chezmoi"
+        },
+        {
+            "path": ".",
+            "name": "config"
+        }
+    ],
+    "settings": {}
+}
