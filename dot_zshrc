@@ -99,6 +99,8 @@ fi
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
+export DOCKER_BUILDKIT=1
+
 # add non-shell-specific aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
