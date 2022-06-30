@@ -1,9 +1,6 @@
 {{ if (eq .chezmoi.os "linux") }}
-{{   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-.bashrc_osh
-{{   else }}
 .bashrc_{{ .chezmoi.os }}
-{{   end }}
+{{  end }}
 {{ else }}
 .bashrc_{{ .chezmoi.os }}
 {{ end }}

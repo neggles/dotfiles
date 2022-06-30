@@ -11,7 +11,7 @@ chezmoi.code-workspace
 {{ end }}
 {{ if ne .chezmoi.os "linux" }}
 .bashrc_linux
-.bashrc_osh
+.bashrc_basic
 {{ end }}
 
 # ignore the contents of these, but not the folders themselves
