@@ -1,6 +1,4 @@
-{{ if (eq .chezmoi.os "linux") }}
-.bashrc_{{ .chezmoi.os }}
-{{  end }}
+{{ if (eq .chezmoi.os "windows") }}
 {{ else }}
 .bashrc_{{ .chezmoi.os }}
 {{ end }}
