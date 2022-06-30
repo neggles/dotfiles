@@ -16,4 +16,6 @@ chezmoi.code-workspace
 
 # ignore the contents of these, but not the folders themselves
 .oh-my-zsh/**
+!.oh-my-zsh
 .oh-my-bash/**
+!.oh-my-bash
