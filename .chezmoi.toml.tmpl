@@ -1,9 +1,11 @@
 {{- /* Check if we're in a codespace and for interactive shell */ -}}
 {{- $codespaces:= env "CODESPACES" | not | not -}}
+
 {{- $interactive := stdinIsATTY -}}
 
 {{- /* Initializes the name variable with a default value */ -}}
 {{- $name := "neg2led" -}}
+
 {{- /* If name was previously set, reuses it */ -}}
 {{- if hasKey . "name" -}}
 {{-   $name = .name -}}
@@ -21,7 +23,14 @@
 {{- end -}}
 
 {{- if $interactive -}}
-{{-   writeToStdout "💡 Tip: you can re-enter your name and email with `chezmoi init --data=false`.\n" -}}
+{{-   writeToStdout "💡 Run `chezmoi init --data=false` to change what you entered above. \n" -}}
+{{- end -}}
+
+# .osid will be {{ .chezmoi.os }} on systems without /etc/os-release,
+# or {{ .chezmoi.os }}-{{ .chezmoi.osRelease.id }} on systems with one.
+{{- $osid := .chezmoi.os -}}
+{{- if hasKey .chezmoi.osRelease "id" -}}
+{{-   $osid = printf "%s-%s" .chezmoi.os .chezmoi.osRelease.id -}}
 {{- end -}}
 
 sourceDir = {{ .chezmoi.sourceDir | quote }}
@@ -30,3 +39,4 @@ sourceDir = {{ .chezmoi.sourceDir | quote }}
     codespaces = {{ $codespaces }}
     email = {{ $email | quote }}
     name = {{ $name | quote }}
+    osid = {{ $osid | quote }}

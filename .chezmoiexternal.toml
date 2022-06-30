@@ -12,7 +12,7 @@
     refreshPeriod = "168h"
 [".oh-my-zsh/custom/themes/powerlevel10k"]
     type = "archive"
-    url = "https://github.com/romkatv/powerlevel10k/archive/v1.15.0.tar.gz"
+    url = "https://github.com/romkatv/powerlevel10k/archive/v1.16.1.tar.gz"
     exact = true
     stripComponents = 1
 [".oh-my-bash"]
@@ -21,6 +21,7 @@
     exact = true
     stripComponents = 1
     refreshPeriod = "168h"
+
 {{- if eq .chezmoi.os "darwin" }}
 ["Library/Fonts/MesloLGS NF Regular.ttf"]
     type = "file"

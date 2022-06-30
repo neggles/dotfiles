@@ -1,9 +1,11 @@
+# ignore github actions and whatnot
 .github/
 install.sh
 LICENSE
 README.md
 chezmoi.code-workspace
 
+# ignore os-specific variants
 {{ if ne .chezmoi.os "darwin" }}
 .bashrc_darwin
 {{ end }}
@@ -12,8 +14,6 @@ chezmoi.code-workspace
 .bashrc_osh
 {{ end }}
 
-{{ if (eq .chezmoi.os "linux") }}
-{{   if not (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-.oh-my-bash/
-{{   end }}
-{{ end }}
+# ignore the contents of these, but not the folders themselves
+.oh-my-zsh/**
+.oh-my-bash/**
