@@ -8,8 +8,9 @@ true || source ../.chezmoitemplates/scripts-library
 win_home="$(wslvar USERPROFILE)"
 win_home="$(wslpath "${win_home}")"
 
-if [[ -f "${win_home}/.ssh/id_rsa" ]]; then
+if [[ -f "${win_home}/.ssh/id_*" ]]; then
   log_task "Syncing .ssh folder from Windows to WSL"
-  cp -rf "${win_home}/.ssh/." "${HOME}/.ssh"
-  chmod 600 "${HOME}/.ssh/id_rsa"
+  cp -au "${win_home}/.ssh/id_*" "${HOME}/.ssh"
+  chmod 600 "${HOME}/.ssh/id_*"
+  chmod 644 "${HOME}/.ssh/id_*.pub"
 fi
