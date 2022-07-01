@@ -3,6 +3,13 @@
 
 {{- template "read-versions-and-revisions-cache" $cache -}}
 
+".oh-my-bash":
+  type: archive
+  url: "https://github.com/ohmybash/oh-my-bash/archive/{{ template "get-github-head-revision" list "ohmybash/oh-my-bash" $cache }}.tar.gz"
+  stripComponents: 1
+  # waiting for https://github.com/twpayne/chezmoi/issues/1614#issuecomment-966524408
+  # exact: true
+
 ".oh-my-zsh":
   type: archive
   url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{ template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache }}.tar.gz"
