@@ -7,20 +7,24 @@ true || source ../.chezmoitemplates/scripts-library
 
 zsh_path="/bin/zsh"
 
-if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
-  log_task "Configuring ZSH as default shell"
+if [[ "$(uname -s)" == "Linux" ]]; then
+  if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
+    log_task "Configuring ZSH as default shell"
+      c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
+  fi
 
-  c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
-fi
-
-# Alpine frequently does not come with script (from util-linux) installed
-if command -v script >/dev/null && [[ ! -d "${HOME}/.cache/gitstatus" ]]; then
-  log_task "Initializing ZSH"
-  bash -e <<'EOF' >/dev/null
+  # Alpine frequently does not come with script (from util-linux) installed
+  if command -v script >/dev/null && [[ ! -d "${HOME}/.cache/gitstatus" ]]; then
+    log_task "Initializing ZSH"
+    bash -e <<'EOF' >/dev/null
 # We need to be in a git repository, so gitstatusd initiliazes
 cd '{{ .chezmoi.workingTree }}'
 
 # We also need to emulate a TTY
 script -qec "zsh -is </dev/null" > /dev/null
 EOF
+  fi
+
+else
+  log_info " This is not a Linux box, so it's probably a Mac, so you're already using ZSH."
 fi
