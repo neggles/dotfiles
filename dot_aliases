@@ -7,7 +7,10 @@ fi
 
 ### * some useful stuff ###
 alias benice='ionice -c 3 nice -n19'
-alias mtmake="make -j$(($(nproc)+1))"
+
+if command -v nproc; then
+    alias mtmake='make -j$(($(nproc)+1))'
+fi
 
 alias dfh='df -HT --total -x tmpfs -x squashfs'
 alias lsblks='lsblk -e7'
