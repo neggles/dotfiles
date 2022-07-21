@@ -1,12 +1,8 @@
 {
     "folders": [
         {
-            "path": "../../.local/share/chezmoi",
-            "name": "chezmoi"
-        },
-        {
             "path": ".",
-            "name": "config"
+            "name": "chezmoi-local"
         }
     ],
     "settings": {}

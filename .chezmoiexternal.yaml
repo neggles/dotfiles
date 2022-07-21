@@ -45,6 +45,8 @@
   type: file
   url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
   executable: true
+  
+{{ if not .is_devcontainer -}}
 
 ".local/bin/kubectx":
   type: file
@@ -63,35 +65,6 @@
 ".oh-my-zsh/custom/plugins/my-completions/_kubens.zsh":
   type: file
   url: "https://github.com/ahmetb/kubectx/raw/{{ template "get-github-head-revision" list "ahmetb/kubectx" $cache }}/completion/_kubens.zsh"
-
-{{ $openSslVersion := "1.1" }}
-{{ if semverCompare ">=22.04" .chezmoi.osRelease.versionID }}
-{{   $openSslVersion = "3.0" }}
-{{ end }}
-".volta/bin":
-  type: archive
-  url: "https://github.com/volta-cli/volta/releases/download/v{{ template "get-github-latest-version" list "volta-cli/volta" $cache }}/volta-{{ template "get-github-latest-version" list "volta-cli/volta" $cache }}-linux-openssl-{{ $openSslVersion }}.tar.gz"
-
-{{ if not .is_devcontainer -}}
-{{   if .is_gnome -}}
-".local/share/nautilus-python/extensions/code-nautilus.py":
-  type: file
-  url: "https://raw.githubusercontent.com/harry-cpp/code-nautilus/{{ template "get-github-head-revision" list "harry-cpp/code-nautilus" $cache }}/code-nautilus.py"
-
-{{      if not .is_wsl -}}
-".local/bin/gnome-shell-extension-installer":
-  type: file
-  url: "https://raw.githubusercontent.com/brunelli/gnome-shell-extension-installer/{{ template "get-github-head-revision" list "brunelli/gnome-shell-extension-installer" $cache }}/gnome-shell-extension-installer"
-  executable: true
-{{-     end }}
-
-{{-   end }}
-
-".deno/bin":
-  type: archive
-  url: "https://github.com/denoland/deno/releases/download/v{{ template "get-github-latest-version" list "denoland/deno" $cache }}/deno-x86_64-unknown-linux-gnu.zip"
-  include:
-    - deno
 
 ".docker/cli-plugins/docker-compose":
   type: file
