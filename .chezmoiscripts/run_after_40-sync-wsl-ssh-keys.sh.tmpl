@@ -2,8 +2,12 @@
 
 # {{ template "scripts-library" }}
 
+# {{- if .is_wsl -}}
+
 # The following line is for ShellCheck to correctly identify the above include
 true || source ../.chezmoitemplates/scripts-library
+
+skip_if_not_linux
 
 win_home="$(wslvar USERPROFILE)"
 win_home="$(wslpath "${win_home}")"
@@ -14,3 +18,5 @@ if [[ -f "${win_home}/.ssh/id_*" ]]; then
   chmod 600 "${HOME}/.ssh/id_*"
   chmod 644 "${HOME}/.ssh/id_*.pub"
 fi
+
+# {{- end -}}

@@ -6,6 +6,16 @@ if [[ -n "${DOTFILES_DEBUG:-}" ]]; then
   set -x
 fi
 
+function skip_if_not_linux() {
+  # if we are not on linux exit success
+  if [[ "$(uname -s)" == "Linux" ]]; then
+    true
+  else
+    log_info ' This is not a Linux system, skipping ca-certificates update'
+    exit 0
+  fi
+}
+
 function ensure_path_entry() {
   local entries=("$@")
 
