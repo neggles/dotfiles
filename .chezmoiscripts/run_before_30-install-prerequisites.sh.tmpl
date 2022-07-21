@@ -6,8 +6,10 @@
 true || source ../.chezmoitemplates/scripts-library
 
 # if we are not on linux exit success
-if [[ "$(uname -s)" != "Linux" ]]; then
-  log_info 'This is not a Linux system, skipping ca-certificates update'
+if [[ "$(uname -s)" == "Linux" ]]; then
+  log_info ' Checking for apt packages...'
+else
+  log_info ' This is not a Linux system, skipping prerequisitess update'
   exit 0
 fi
 

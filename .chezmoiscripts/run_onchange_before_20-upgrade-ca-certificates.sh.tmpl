@@ -9,12 +9,13 @@
 true || source ../.chezmoitemplates/scripts-library
 
 # if we are not on linux exit success
-if [[ ! "$(uname -a)" ~= Linux ]]; then
-  log_task 'This is not a Linux system, skipping ca-certificates update'
+if [[ "$(uname -s)" == "Linux" ]]; then
+  log_task ' Upgrading ca-certificates'
+else
+  log_info ' This is not a Linux system, skipping ca-certificates update'
   exit 0
 fi
 
-log_task "Upgrading ca-certificates"
 
 # Ignore apt update error if it is due to expired certificate (because chances are that
 # the next command will fix it.
