@@ -16,6 +16,7 @@ readonly wanted_packages=(
   gpg  # used to decrypt the gpg keys of the apt repositories
   gzip # used for zcat in .chezmoiexternal.yaml
   # {{   if .is_wsl }}
+  wslu # used for `wslvar`
   crudini # used to configure wsl.conf
   # {{   end }}
   # {{ end }}

@@ -14,9 +14,10 @@ win_home="$(wslpath "${win_home}")"
 
 if [[ -f "${win_home}/.ssh/id_*" ]]; then
   log_task "Syncing .ssh folder from Windows to WSL"
-  cp -au "${win_home}/.ssh/id_*" "${HOME}/.ssh"
-  chmod 600 "${HOME}/.ssh/id_*"
-  chmod 644 "${HOME}/.ssh/id_*.pub"
+  mkdir -p "${HOME}/.ssh"
+  cp -au ${win_home}/.ssh/id_* "${HOME}/.ssh"
+  chmod 600 ${HOME}/.ssh/id_*
+  chmod 644 ${HOME}/.ssh/id_*.pub
 fi
 
 # {{- end -}}
