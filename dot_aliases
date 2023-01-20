@@ -24,8 +24,11 @@ picoterm() {
 
 ### * openWRT ###
 # build shit as fast as you can
-alias wrtmake='make -j$(($(nproc)+1)) world'
-alias wrtmakeauto='make -j$(($(nproc)+1)) world || make -j1 V=s world'
+alias wrtmake='make -j$(($(nproc)+1)) target/linux/clean world'
+alias wrtmakeauto='make -j$(($(nproc)+1)) target/linux/clean world || make -j1 V=sc world; threebeep'
+
+# update those feeds
+alias wrtfeedupdate='./scripts/feeds update -a && ./scripts/feeds install -a && ./scripts/feeds install -a'
 
 # quilt-related; first, prep for quilt shenanigans:
 alias wrtkqprep='make target/linux/{clean,prepare} V=s QUILT=1'
@@ -41,26 +44,76 @@ alias wrtkqfetch='make target/linux/update package/index V=s'
 
 ### * some useful functions for devicetree ###
 if (which dtc > /dev/null); then
-    resize_dtb() {
+    dtbresize() {
         local DTB_FILE="$1"
         local DTB_LEN=$(file -b "${DTB_FILE}" | sed -e 's/^.\+, size=\([0-9]\+\).*/\1/')
         local DTB_OUT=$(echo "${DTB_FILE}" | sed 's/\.dtb/-trim.dtb/')
-        dd if="${DTB_FILE}" of="${DTB_OUT}" bs=1 count="${DTB_LEN}"
+        dd if="${DTB_FILE}" of="${DTB_OUT}" iflag=count_bytes count="${DTB_LEN}"
     }
+    alias dtbresize-all='for file in $(ls -1 *.dtb); do dtbresize $file; done'
 
-    dtb_to_dts() {
+    dtb2dts() {
         local DTB_FILE="$1"
         local DTB_OUT=$(echo "${DTB_FILE}" | sed 's/\.dtb/.dts/')
         dtc -q -@ -A -H epapr -I dtb -O dts -o "${DTB_OUT}" "${DTB_FILE}"
     }
+    alias dtb2dts-all='for file in $(ls -1 *.dtb); do dtb2dts $file; done'
 
-    rename_dts() {
+    dtsrename() {
         local DTS_FILE="$1"
-        local DTS_MODEL=$(grep model "${DTS_FILE}" | sed -e 's/\s\+model = \".\+, \(.*\)\".*/\L\1/g')
+        local DTS_MODEL=$(grep model "${DTS_FILE}" | sed -E 's/\.\+model = \".\+, \(.*\)\".*/\L\1/g')
         mv "${DTS_FILE}" "${DTS_MODEL}_${DTS_FILE}"
     }
+    alias dtsrename-all='for file in $(ls -1 *.dts); do dtsrename $file; done'
 
-    alias all_dtb_trim='for file in $(ls -1 *.dtb); do resize_dtb $file; done'
-    alias all_dtb_to_dts='for file in $(ls -1 *.dtb); do dtb_to_dts $file; done'
-    alias all_dts_rename='for file in $(ls -1 *.dts); do rename_dts $file; done'
+    # alias dtsfixnull="sed -i 's/\\\0/\", \"/g'"
+    alias dtsfixnull="sed -i 's/\\\0/\", \"/g' *.dts"
 fi
+
+
+threebeep() {
+    echo -e '\a'
+    sleep 0.5
+    echo -e '\a'
+    sleep 0.5
+    echo -e '\a'
+}
+
+owrt_feed_freeze() {
+    [ -f feeds.conf ] && truncate -s0 feeds.conf || true
+    for feed in $(grep -v '#' feeds.conf.default | cut -f2 -d' ' | tr '\n' ' '); do
+        FEED_REV=$(cd feeds/$feed && git rev-parse HEAD)
+        FEED_LINE=$(grep "^src-git $feed " feeds.conf.default)
+        echo -n "freezing $feed: "
+        echo "$FEED_LINE^$FEED_REV" | tee -a feeds.conf
+    done
+}
+
+# fix stupid broken terminal garbage
+alias fixterm='echo -e "\033c"; stty sane; tput sgr0; echo -e '\x16\x0f'; setterm -reset; reset; tput reset; clear'
+
+# ls
+alias ls='ls --color=tty --g'
+
+# purge key from known_hosts
+alias ssh-forget-host='ssh-keygen -f ~/.ssh/known_hosts -R'
+
+# check if byte all zero
+function check_all_zero() {
+    local FILE=$1
+    cmp -n $(stat -c %s $FILE) $FILE /dev/zero
+}
+alias tb='nc termbin.com 9999'
+
+function get-crosfile {
+    local crosurl outfile
+    crosurl=${1:?'missing file url'}
+    crosurl=${crosurl%?format=TEXT*}
+    outfile=${2:-"${crosurl##*/}"}
+
+    if [[ -f "${outfile}" ]]; then
+        echo "file ${outfile} already exists, will not clobber"
+    else
+        curl -fsSL "${crosurl}?format=TEXT" | base64 -d > "${outfile}"
+    fi
+}
