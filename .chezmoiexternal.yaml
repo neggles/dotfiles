@@ -7,6 +7,7 @@
   type: archive
   url: "https://github.com/ohmybash/oh-my-bash/archive/{{ template "get-github-head-revision" list "ohmybash/oh-my-bash" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   # waiting for https://github.com/twpayne/chezmoi/issues/1614#issuecomment-966524408
   # exact: true
 
@@ -14,6 +15,7 @@
   type: archive
   url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{ template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   # waiting for https://github.com/twpayne/chezmoi/issues/1614#issuecomment-966524408
   # exact: true
 
@@ -21,59 +23,71 @@
   type: archive
   url: "https://github.com/romkatv/powerlevel10k/archive/{{ template "get-github-head-revision" list "romkatv/powerlevel10k" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   exact: true
 
 ".oh-my-zsh/custom/plugins/zsh-syntax-highlighting":
   type: archive
   url: "https://github.com/zsh-users/zsh-syntax-highlighting/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-syntax-highlighting" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   exact: true
+  include: [ "*/*.zsh", "*/.version", "*/.revision-hash", "*/highlighters/**" ]
 
 ".oh-my-zsh/custom/plugins/zsh-autosuggestions":
   type: archive
   url: "https://github.com/zsh-users/zsh-autosuggestions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-autosuggestions" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   exact: true
 
 ".oh-my-zsh/custom/plugins/zsh-completions":
   type: archive
   url: "https://github.com/zsh-users/zsh-completions/archive/{{ template "get-github-head-revision" list "zsh-users/zsh-completions" $cache }}.tar.gz"
   stripComponents: 1
+  refreshPeriod: "168h"
   exact: true
 
 ".local/bin/direnv":
   type: file
   url: "https://github.com/direnv/direnv/releases/download/v{{ template "get-github-latest-version" list "direnv/direnv" $cache }}/direnv.linux-{{ .chezmoi.arch }}"
+  refreshPeriod: "168h"
   executable: true
-  
+
 {{ if not .is_devcontainer -}}
 
 ".local/bin/kubectx":
   type: file
   url: "https://github.com/ahmetb/kubectx/raw/{{ template "get-github-head-revision" list "ahmetb/kubectx" $cache }}/kubectx"
+  refreshPeriod: "168h"
   executable: true
 
 ".oh-my-zsh/custom/plugins/my-completions/_kubectx.zsh":
   type: file
   url: "https://github.com/ahmetb/kubectx/raw/{{ template "get-github-head-revision" list "ahmetb/kubectx" $cache }}/completion/_kubectx.zsh"
+  refreshPeriod: "168h"
 
 ".local/bin/kubens":
   type: file
   url: "https://github.com/ahmetb/kubectx/raw/{{ template "get-github-head-revision" list "ahmetb/kubectx" $cache }}/kubens"
+  refreshPeriod: "168h"
   executable: true
 
 ".oh-my-zsh/custom/plugins/my-completions/_kubens.zsh":
   type: file
   url: "https://github.com/ahmetb/kubectx/raw/{{ template "get-github-head-revision" list "ahmetb/kubectx" $cache }}/completion/_kubens.zsh"
+  refreshPeriod: "168h"
 
 ".docker/cli-plugins/docker-compose":
   type: file
   url: "https://github.com/docker/compose/releases/download/v{{ template "get-github-latest-version" list "docker/compose" $cache }}/docker-compose-linux-x86_64"
+  refreshPeriod: "168h"
   executable: true
 
 ".docker/cli-plugins/docker-buildx":
   type: file
   url: "https://github.com/docker/buildx/releases/download/v{{ template "get-github-latest-version" list "docker/buildx" $cache }}/buildx-v{{ template "get-github-latest-version" list "docker/buildx" $cache }}.linux-amd64"
+  refreshPeriod: "168h"
   executable: true
 
 # Downloads all the variants of Fira Code Nerd Font
@@ -82,6 +96,7 @@
 ".local/share/fonts/Fira Code {{ $face }} Nerd Font Complete{{ $variant }}.ttf":
   type: file
   url: "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/{{ template "get-github-head-revision" list "ryanoasis/nerd-fonts" $cache }}/patched-fonts/FiraCode/{{ $face }}/complete/Fira%20Code%20{{ $face }}%20Nerd%20Font%20Complete{{ $variant | replace " " "%20" }}.ttf"
+  refreshPeriod: "168h"
 {{      end -}}
 {{-   end -}}
 
