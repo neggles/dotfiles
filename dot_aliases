@@ -8,7 +8,7 @@ fi
 ### * some useful stuff ###
 alias benice='ionice -c 3 nice -n19'
 
-if command -v nproc; then
+if (command -v nproc >/dev/null); then
     alias mtmake='make -j$(($(nproc)+1))'
 fi
 
