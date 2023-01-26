@@ -79,6 +79,7 @@ plugins=(
   ripgrep
   fd
   kubectl
+  direnv
 )
 
 # include local overrides if required
