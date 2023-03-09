@@ -11,7 +11,17 @@ function skip_if_not_linux() {
   if [[ "$(uname -s)" == "Linux" ]]; then
     true
   else
-    log_info ' This is not a Linux system, skipping ca-certificates update'
+    log_info " This is not a Linux system, skipping ${1:-''}"
+    exit 0
+  fi
+}
+
+function skip_if_not_apt() {
+  # if we are on a non-apt system print a warning them exit
+  if [ "$(command -v apt)" ]; then
+    true
+  else
+    log_info " This is not an apt distribution, skipping ${1:-''}"
     exit 0
   fi
 }
