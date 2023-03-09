@@ -1,7 +1,7 @@
 # global / non-shell-specific aliases go here :D
 
 ### * 1Password, if installed ###
-if (which op > /dev/null); then
+elif [ "$(command -v op)" ]; then
     alias oplogin='$ eval $(op signin stanholm.1password.com neg2led@gmail.com)'
 fi
 
@@ -43,7 +43,7 @@ alias wrtkmake='make -j$(($(nproc)+1)) target/linux/{compile,install} V=s'
 alias wrtkqfetch='make target/linux/update package/index V=s'
 
 ### * some useful functions for devicetree ###
-if (which dtc > /dev/null); then
+if [ "$(command -v dtc)" ]; then
     dtbresize() {
         local DTB_FILE="$1"
         local DTB_LEN=$(file -b "${DTB_FILE}" | sed -e 's/^.\+, size=\([0-9]\+\).*/\1/')
