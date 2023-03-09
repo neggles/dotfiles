@@ -1,7 +1,7 @@
 # global / non-shell-specific aliases go here :D
 
 ### * 1Password, if installed ###
-elif [ "$(command -v op)" ]; then
+if [ "$(command -v op)" ]; then
     alias oplogin='$ eval $(op signin stanholm.1password.com neg2led@gmail.com)'
 fi
 
