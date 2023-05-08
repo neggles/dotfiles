@@ -80,7 +80,7 @@
 
 # Downloads all the variants of Fira Code Nerd Font
 {{-   range $_, $face := list "Regular" "Light" "Medium" "Bold" "Retina" "SemiBold" -}}
-{{-     range $_, $variant := list "" " Mono" }}
+{{-     range $_, $variant := list "" "Mono" }}
 ".local/share/fonts/FiraCodeNerdFont{{ $variant }}-{{ $face }}.ttf":
   type: file
   url: "https://raw.githubusercontent.com/ryanoasis/nerd-fonts/{{ template "get-github-head-revision" list "ryanoasis/nerd-fonts" $cache }}/patched-fonts/FiraCode/{{ $face }}/FiraCodeNerdFont{{ $variant }}-{{ $face }}.ttf"
